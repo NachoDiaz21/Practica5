@@ -43,6 +43,7 @@ class TareaFragment : Fragment() {
         }*/
         iniciaSpCategoria()
         iniciaSpPrioridad()
+        iniciaSwPagado()
         binding.root.setOnApplyWindowInsetsListener { view, insets ->
             view.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets
@@ -104,5 +105,18 @@ class TareaFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun iniciaSwPagado() {
+        binding.swPagado.setOnCheckedChangeListener { _, isChecked ->
+            //cambiamos el icono si está marcado o no el switch
+            val imagen=if (isChecked) R.drawable.ic_pagado
+            else R.drawable.ic_no_pagado
+            //asignamos la imagen desde recursos
+            binding.ivPagado.setImageResource(imagen)
+        }
+        //iniciamos a valor false
+        binding.swPagado.isChecked=false
+        binding.ivPagado.setImageResource(R.drawable.ic_no_pagado)
     }
 }
