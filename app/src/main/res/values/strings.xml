@@ -8,4 +8,19 @@
     <string name="previous">Previous</string>
     <string name="tarea_fragment_label">Tarea</string>
     <string name="lista_fragment_label">Lista</string>
+    <string name="categoria">Categoria</string>
+    <string name="prioridad">Prioridad</string>
+    <string-array name="categoria">
+        <item>Reparación</item>
+        <item>Instalación</item>
+        <item>Mantenimiento</item>
+        <item>Comercial</item>
+        <item>otros</item>
+    </string-array>
+    <string-array name="prioridad">
+        <item>Baja</item>
+        <item>Media</item>
+        <item>Alta</item>
+    </string-array>
+    <string name="mensaje_categoria">Has seleccionado %1$s como categoría</string>
 </resources>
