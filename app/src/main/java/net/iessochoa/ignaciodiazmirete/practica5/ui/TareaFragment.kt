@@ -44,6 +44,7 @@ class TareaFragment : Fragment() {
         iniciaSpCategoria()
         iniciaSpPrioridad()
         iniciaSwPagado()
+        iniciaRgEstado()
         binding.root.setOnApplyWindowInsetsListener { view, insets ->
             view.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets
@@ -118,5 +119,23 @@ class TareaFragment : Fragment() {
         //iniciamos a valor false
         binding.swPagado.isChecked=false
         binding.ivPagado.setImageResource(R.drawable.ic_no_pagado)
+    }
+
+    private fun iniciaRgEstado() {
+        // Asignar un OnClickListener a cada RadioButton
+        binding.rbAbierta.setOnClickListener {
+            binding.ivEstado.setImageResource(R.drawable.ic_abierto)
+        }
+
+        binding.rbEncurso.setOnClickListener {
+            binding.ivEstado.setImageResource(R.drawable.ic_encurso)
+        }
+
+        binding.rbCerrada.setOnClickListener {
+            binding.ivEstado.setImageResource(R.drawable.ic_cerrado)
+        }
+
+        // Iniciamos a abierto por defecto
+        binding.rbAbierta.isChecked = true
     }
 }
