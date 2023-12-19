@@ -20,9 +20,12 @@
         android:name="net.iessochoa.ignaciodiazmirete.practica5.ui.TareaFragment"
         android:label="@string/tarea_fragment_label"
         tools:layout="@layout/fragment_tarea">
-
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/ListaFragment" />
+        <argument
+            android:name="tarea"
+            app:argType="net.iessochoa.ignaciodiazmirete.practica5.ui.Tarea"
+            app:nullable="true" />
     </fragment>
 </navigation>
