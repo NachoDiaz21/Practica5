@@ -67,11 +67,40 @@ class ListaFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun iniciaFiltros(){
-        binding.swSinPagar.setOnCheckedChangeListener( ) { _,isChecked->
-            //actualiza el LiveData SoloSinPagarLiveData que a su vez modifica tareasLiveData
-            //mediante el Transformation
-            viewModel.setSoloSinPagar(isChecked)}
+    private fun iniciaFiltros() {
+        binding.swSinPagar.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setSoloSinPagar(isChecked)
+        }
+
+        binding.rgEstados.setOnCheckedChangeListener { _, checkedId ->
+            // Traducir el ID del RadioButton a un valor de estado (0, 1, 2, 3)
+            val estadoFiltrado = when (checkedId) {
+                R.id.rbAbierta -> 0
+                R.id.rbEnCurso -> 1
+                R.id.rbCerrada -> 2
+                R.id.rbTodas -> 3
+                else -> -1 // Valor por defecto o manejo de error si es necesario
+            }
+
+            // Llamar a setEstado en el ViewModel para aplicar el filtro
+            if (estadoFiltrado != -1) {
+                viewModel.setEstado(estadoFiltrado)
+            }
+        }
+        // Inicializar los filtros según el estado inicial del Fragmento.
+        val idRadioButtonSeleccionado = binding.rgEstados.checkedRadioButtonId
+        val estadoFiltradoInicial = when (idRadioButtonSeleccionado) {
+            R.id.rbAbierta -> 0
+            R.id.rbEnCurso -> 1
+            R.id.rbCerrada -> 2
+            R.id.rbTodas -> 3
+            else -> -1 // Valor por defecto o manejo de error si es necesario
+        }
+
+        // Llamar a setEstado en el ViewModel para aplicar el filtro inicial
+        if (estadoFiltradoInicial != -1) {
+            viewModel.setEstado(estadoFiltradoInicial)
+        }
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
@@ -91,7 +120,8 @@ class ListaFragment : Fragment() {
                     }-" + when (it.estado) {
                         0 -> "ABIERTA"
                         1 -> "EN_CURSO"
-                        else -> "CERRADA"
+                        2 -> "CERRADA"
+                        else -> "TODAS"
                     } + "\n"
                 )
             }

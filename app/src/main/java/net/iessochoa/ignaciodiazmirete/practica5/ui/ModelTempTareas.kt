@@ -43,11 +43,21 @@ object ModelTempTareas {
     }
     fun getTareasFiltroSinPagar(soloSinPagar:Boolean): LiveData<List<Tarea>> {
         //devuelve el LiveData con la lista filtrada o entera
-        tareasLiveData.value=
-            if(soloSinPagar)
-            tareas.filter { !it.pagado } as ArrayList<Tarea>
+        tareasLiveData.value= if(soloSinPagar) tareas.filter { !it.pagado } as ArrayList<Tarea>
         else
             tareas
+        return tareasLiveData
+    }
+    fun getTareasFiltroEstado(estado: Int): LiveData<List<Tarea>> {
+        tareasLiveData.value = tareas.filter { it.estado == estado } as ArrayList<Tarea>
+        return tareasLiveData
+    }
+
+    fun getTareasFiltroSinPagarEstado(soloSinPagar:Boolean, estado:Int):
+            MutableLiveData<List<Tarea>> {
+        //devuelve el LiveData con la lista filtrada
+        tareasLiveData.value=tareas.filter { !it.pagado &&
+                it.estado==estado } as ArrayList<Tarea>
         return tareasLiveData
     }
     //Crea unas Tareas de prueba de forma aleatorias

@@ -32,7 +32,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
@@ -40,8 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/rgEstados" />
 
     <Button
         android:id="@+id/btPruebaEdicion"
@@ -52,5 +50,39 @@
         android:text="@string/prueba_edici_n"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgEstados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swSinPagar">
+
+        <RadioButton
+            android:id="@+id/rbAbiertas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abierta" />
+
+        <RadioButton
+            android:id="@+id/rbEnCursos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En Curso" />
+
+        <RadioButton
+            android:id="@+id/rbCerradas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrada" />
+
+        <RadioButton
+            android:id="@+id/rbTodas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Todas" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
