@@ -8,7 +8,7 @@
     tools:context=".ui.TareaFragment">
 
     <Spinner
-        android:id="@+id/spnPrioridad"
+        android:id="@+id/spPrioridad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvCategoria"
-        app:layout_constraintTop_toBottomOf="@+id/spnCategoria" />
+        app:layout_constraintTop_toBottomOf="@+id/spCategoria" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabGuardar"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCategoria" />
 
     <Spinner
-        android:id="@+id/spnCategoria"
+        android:id="@+id/spCategoria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -82,7 +82,7 @@
         android:text="@string/pagado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ivPagado"
-        app:layout_constraintTop_toBottomOf="@+id/spnPrioridad" />
+        app:layout_constraintTop_toBottomOf="@+id/spPrioridad" />
 
     <RadioGroup
         android:id="@+id/rgEstado"
@@ -101,7 +101,7 @@
             android:text="@string/abierta" />
 
         <RadioButton
-            android:id="@+id/rbEncurso"
+            android:id="@+id/rbEnCurso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/en_curso" />
@@ -166,7 +166,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvHoras" />
 
     <RatingBar
-        android:id="@+id/rbValoracion"
+        android:id="@+id/rtbValoracion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -185,7 +185,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rbValoracion">
+        app:layout_constraintTop_toBottomOf="@+id/rtbValoracion">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTecnico"

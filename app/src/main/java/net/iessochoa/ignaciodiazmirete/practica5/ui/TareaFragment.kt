@@ -1,6 +1,7 @@
 package net.iessochoa.ignaciodiazmirete.practica5.ui
 
 import android.graphics.Color
+import android.health.connect.datatypes.units.Length
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,31 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import net.iessochoa.ignaciodiazmirete.practica5.R
 import net.iessochoa.ignaciodiazmirete.practica5.databinding.FragmentTareaBinding
+import net.iessochoa.ignaciodiazmirete.practica5.viewmodel.AppViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 @Suppress("DEPRECATION")
 class TareaFragment : Fragment() {
+
+    val args: TareaFragmentArgs by navArgs()
+    private val viewModel: AppViewModel by activityViewModels()
+    //será una tarea nueva si no hay argumento
+    val esNuevo by lazy { args.tarea==null }
+
 
     private var _binding: FragmentTareaBinding? = null
 
@@ -47,6 +62,14 @@ class TareaFragment : Fragment() {
         iniciaSwPagado()
         iniciaRgEstado()
         iniciaSbHoras()
+        iniciaFabGuardar()
+
+        if (esNuevo)//nueva tarea
+        //cambiamos el título de la ventana
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = "Nueva tarea"
+        else
+            iniciaTarea(args.tarea!!)
+
         binding.root.setOnApplyWindowInsetsListener { view, insets ->
             view.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets
@@ -63,10 +86,10 @@ class TareaFragment : Fragment() {
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spnCategoria.adapter = adapter
-            binding.spnCategoria.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
+            binding.spCategoria.adapter = adapter
+            binding.spCategoria.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, v: View?, posicion: Int, id: Long) {
-                    val valor=binding.spnCategoria.getItemAtPosition(posicion)
+                    val valor=binding.spCategoria.getItemAtPosition(posicion)
                     val mensaje=getString(R.string.mensaje_categoria,valor)
                     Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
@@ -88,8 +111,8 @@ class TareaFragment : Fragment() {
             // Layout para mostrar la apariencia de la lista
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // asignamos el adaptador al spinner
-            binding.spnPrioridad.adapter = adapter
-            binding.spnPrioridad.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
+            binding.spPrioridad.adapter = adapter
+            binding.spPrioridad.onItemSelectedListener=object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, v: View?, posicion: Int, id: Long) {
                     //el array son 3 elementos y "alta" ocupa la tercera posición
                     if(posicion==2){
@@ -103,6 +126,68 @@ class TareaFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun guardaTarea() {
+        //recuperamos los datos
+        val categoria=binding.spCategoria.selectedItemPosition
+        val prioridad=binding.spPrioridad.selectedItemPosition
+        val pagado=binding.swPagado.isChecked
+        val estado=when (binding.rgEstado.checkedRadioButtonId) {
+            R.id.rbAbierta -> 0
+            R.id.rbEnCurso -> 1
+            else -> 2
+        }
+        val horas=binding.sbHoras.progress
+        val valoracion=binding.rtbValoracion.rating
+        val tecnico=binding.etTecnico.text.toString()
+        val descripcion=binding.etDescripcion.text.toString()
+        //creamos la tarea: si es nueva, generamos un id, en otro caso le  asignamos su id
+        val tarea = if(esNuevo)
+
+            Tarea(categoria,prioridad,pagado,estado,horas,valoracion,tecnico,descripcion)
+        else
+
+            Tarea(args.tarea!!.id,categoria,prioridad,pagado,estado,horas,valoracion,tecnico,descripcion)
+        //guardamos la tarea desde el viewmodel
+        viewModel.addTarea(tarea)
+        //salimos de editarFragment
+        findNavController().popBackStack()
+    }
+
+    private fun iniciaFabGuardar(){
+        binding.fabGuardar.setOnClickListener{
+            if(binding.etTecnico.text.toString().isEmpty() || binding.etDescripcion.text.toString().isEmpty())
+                muestraMensajeError()
+            else
+                guardaTarea()
+        }
+    }
+
+    private fun muestraMensajeError() {
+        Toast.makeText(requireContext(), "Los campos Técnico y/o Descripción no pueden estar vacíos", Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Carga los valores de la tarea a editar
+     */
+    private fun iniciaTarea(tarea: Tarea) {
+        binding.spCategoria.setSelection(tarea.categoria)
+        binding.spPrioridad.setSelection(tarea.prioridad)
+        binding.swPagado.isChecked = tarea.pagado
+        binding.rgEstado.check(
+            when (tarea.estado) {
+                0 -> R.id.rbAbierta
+                1 -> R.id.rbEnCurso
+                else -> R.id.rbCerrada
+            }
+        )
+        binding.sbHoras.progress = tarea.horasTrabajo
+        binding.rtbValoracion.rating = tarea.valoracionCliente
+        binding.etTecnico.setText(tarea.tecnico)
+        binding.etDescripcion.setText(tarea.descripcion)
+        //cambiamos el título
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = "Tarea ${tarea.id}"
     }
 
     override fun onDestroyView() {
@@ -129,7 +214,7 @@ class TareaFragment : Fragment() {
             binding.ivEstado.setImageResource(R.drawable.ic_abierto)
         }
 
-        binding.rbEncurso.setOnClickListener {
+        binding.rbEnCurso.setOnClickListener {
             binding.ivEstado.setImageResource(R.drawable.ic_encurso)
         }
 
