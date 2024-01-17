@@ -60,11 +60,18 @@ class ListaFragment : Fragment() {
             view.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets
         }
+        iniciaFiltros()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun iniciaFiltros(){
+        binding.swSinPagar.setOnCheckedChangeListener( ) { _,isChecked->
+            //actualiza el LiveData SoloSinPagarLiveData que a su vez modifica tareasLiveData
+            //mediante el Transformation
+            viewModel.setSoloSinPagar(isChecked)}
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
